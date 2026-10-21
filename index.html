@@ -1,13 +1,77 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cgs4352-dp4-team-18</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NeedCheck</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f5f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        main {
+            max-width: 420px;
+            margin: auto;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+        }
+
+        button {
+            background-color: #25704c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>NeedCheck</h1>
+        <h2>Good evening, Jordan</h2>
+
+        <p>
+            Check what apps ask for, set rules once,
+            and take back what you've shared.
+        </p>
+
+        <h3>Needs your attention</h3>
+
+        <div class="card">
+            <h3>Temple Run</h3>
+            <p>Temple Run is asking for 4 things.</p>
+            <button>Review permissions</button>
+        </div>
+
+        <h3>Your privacy tools</h3>
+
+        <div class="card">
+            <h3>Privacy Rules</h3>
+            <p>Choose what websites can collect.</p>
+            <button>Set up my rules</button>
+        </div>
+
+        <div class="card">
+            <h3>Receipts</h3>
+            <p>See what information you've shared.</p>
+            <button>View receipts</button>
+        </div>
+    </main>
+</body>
+
 </html>
