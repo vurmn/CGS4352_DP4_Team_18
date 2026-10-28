@@ -1,0 +1,23 @@
+/* Help pop-ups (js/screens/help.js): the example box and the "How we rate apps" list.
+   The sheet's top, title and text are shared with the About sheet, so those stay in account.css */
+
+.help-example {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--card);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+/* Same small orange label as the Why pop-up, so both kinds of help feel like one thing */
+.help-label { margin-bottom: 4px; font-size: 0.8125rem; font-weight: 600; color: var(--accent); }
+.help-more { margin-top: 6px; }
+
+/* How we rate apps: each rating gets its chip, what it means for you, and an example */
+.rate-list { display: flex; flex-direction: column; margin-top: 10px; }
+.rate-item { padding: 14px 0; }
+.rate-item + .rate-item { border-top: 1px solid var(--line); }
+.rate-chip { display: flex; }
+.rate-meaning { margin-top: 8px; font-size: 0.96875rem; font-weight: 500; line-height: 1.4; }
+.rate-example { margin-top: 4px; font-size: 0.875rem; line-height: 1.45; color: var(--ink-2); }
+.rate-eg { font-weight: 600; }

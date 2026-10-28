@@ -1,0 +1,108 @@
+/* Home: greeting, the dark "This week" card and the Priority list. Sizes follow the DP3 Home screen. */
+
+.home .screen-body { position: relative; padding-top: 16px; }
+
+.home-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.home-hello { display: flex; flex-direction: column; min-width: 0; }
+.home-greet {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.home-name {
+  margin-top: 4px;
+  font-family: var(--font-serif);
+  font-size: 2.125rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+/* Avatar circle, opens the account screen. Orange text that stays readable on peach */
+.home-avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--peach);
+  color: var(--accent-press);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  transition: transform 0.12s, background-color 0.15s;
+}
+button.home-avatar:active { transform: scale(0.94); background: var(--accent-soft); }
+
+.home-card-week {
+  margin-top: 18px;
+  padding: 18px 20px 10px;
+  border-radius: 20px;
+}
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+/* Each number is a button now, so the tap area is the whole column */
+.home-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 44px;
+  margin: 0 -6px;
+  padding: 4px 6px;
+  border-radius: 12px;
+  color: #fff;
+  text-align: left;
+  transition: background-color 0.15s;
+}
+.home-stat:active { background: rgba(255, 255, 255, 0.08); }
+.home-stat-num {
+  font-family: var(--font-serif);
+  font-size: 2.125rem;
+  font-weight: 600;
+  line-height: 1.12;
+  font-variant-numeric: tabular-nums;
+}
+.home-stat-label {
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  color: var(--on-dark);
+}
+
+.home-priority { margin-top: 22px; scroll-margin-top: 12px; }
+.home-priority .section-head { margin-bottom: 10px; }
+.home-cards { display: flex; flex-direction: column; gap: 14px; }
+
+/* A quick glow on the list when "waiting for you" sends you here */
+.home-priority.is-flash .section-label { animation: home-flash 900ms ease-out; }
+@keyframes home-flash {
+  0%, 30% { color: var(--accent); }
+  100% { color: var(--muted); }
+}
+
+.home-empty .empty { padding: 30px 20px 26px; }
+
+/* Request cards from check.js (Temple Run is asking for 4 things) */
+.req-card.card--pad { padding: 12px 16px 12px 18px; }
+.req-card .row { padding: 3px 0; gap: 16px; }
+.req-card .row-title { font-size: 1.0313rem; line-height: 1.3; }
+.req-card .row-sub { margin-top: 3px; font-size: 0.875rem; }
+/* No single word left alone on a line on small phones */
+.req-card .row-title, .req-card .row-sub { text-wrap: pretty; }
+.req-card .row-right { align-self: flex-start; margin-top: 2px; }
+.req-card .row--tap:active { background: transparent; }
+.req-card:has(.row--tap:active) { background: var(--card); }
+.req-card .row--tap:focus-visible { outline-offset: 8px; border-radius: 14px; }

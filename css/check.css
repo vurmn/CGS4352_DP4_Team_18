@@ -1,0 +1,435 @@
+/* Task 1: the app behind (game splash, news page or app splash), the NeedCheck sheet on top,
+   the Why pop-up and the requests inbox. Matches the DP3 Task 1 screens. */
+
+.screen.check {
+  --screen-bg: var(--game);
+  --top-min: 84px;
+  color: var(--ink);
+}
+.screen.check--app { --screen-bg: var(--app-color); }
+.screen.check--site { --screen-bg: var(--surface); }
+
+/* The body is just a column here: app on top, sheet at the bottom */
+.app .screen.check .screen-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.check-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.check-bg--game { background: var(--game); }
+/* Other games get a soft glow in their own color, Temple Run stays plain navy like DP3 */
+.check-bg--game::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 55% at 50% 0%, var(--app-color), transparent 70%);
+  opacity: 0.35;
+}
+.check-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+}
+.check-star.is-twinkle { animation: check-twinkle 2.8s ease-in-out infinite alternate; }
+.check-star.is-hidden { visibility: hidden; }
+@keyframes check-twinkle { to { opacity: 0.15; } }
+
+.check-bg--app {
+  background: radial-gradient(90% 55% at 50% 0%, rgba(255, 255, 255, 0.2), transparent 70%), var(--app-color);
+}
+
+/* A made-up news page for cookie banners. It and the game both sit under the sheet's dim */
+.check-bg--site { background: var(--surface); }
+.check-dim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); }
+.site-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--safe-top) + 10px) 18px 10px;
+  color: #fff;
+}
+.site-logo {
+  padding: 1px 8px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 4px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-menu { display: flex; flex-direction: column; gap: 4px; }
+.site-menu i { display: block; width: 20px; height: 2px; border-radius: 1px; background: #fff; }
+.site-article { padding: 18px 18px 0; }
+.site-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.site-headline {
+  margin-top: 6px;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+.site-byline { margin-top: 8px; font-size: 0.8125rem; color: var(--muted); }
+.site-photo {
+  height: 150px;
+  margin-top: 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #9DB0C0, #5A6E80 55%, #34414F);
+}
+.site-lines { display: flex; flex-direction: column; gap: 9px; margin-top: 16px; }
+.site-lines span { height: 9px; border-radius: 5px; background: var(--line); }
+.site-lines .site-gap { height: 4px; background: none; }
+
+/* The space above the sheet, the splash text sits in the middle of it */
+.check-top {
+  flex: 1 1 auto;
+  min-height: var(--top-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 20px 12px;
+  overflow: hidden;
+  container-type: size;
+}
+.check-splash { position: relative; text-align: center; pointer-events: none; }
+/* Shrinks to fit when the space above the sheet is short (small phones, Larger text) or the name is long */
+.check-splash-name {
+  font-family: var(--font-sans);
+  font-size: 2.6rem;
+  font-size: clamp(1.5rem, min(100cqh - 2.5rem, 12.5cqi), 2.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.045em;
+  color: rgba(255, 255, 255, 0.45);
+}
+.check-splash-hint {
+  margin-top: 6px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+.check-splash-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+@container (max-height: 150px) {
+  .check-splash-tile { display: none; }
+}
+
+/* The NeedCheck sheet */
+.check-sheet {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100% - var(--top-min));
+  border-radius: 24px 24px 0 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+}
+/* White below the sheet, so it never shows a gap while it moves */
+.check-sheet::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% - 1px);
+  height: 60vh;
+  background: var(--surface);
+}
+.check-sheet--choose { min-height: calc(100% - var(--top-min)); }
+
+.check-grab {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  height: 24px;
+  padding-top: 10px;
+  touch-action: none;
+  cursor: grab;
+}
+.check-grabber { width: 36px; height: 5px; border-radius: 3px; background: var(--line-2); }
+
+.check-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px var(--pad) 10px;
+}
+.check-foot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px var(--pad) max(14px, var(--safe-bottom));
+  background: var(--surface);
+  transition: box-shadow 0.15s;
+}
+/* A hairline over the buttons only when the list scrolls under them, plus a soft fade while there's more below */
+.check-sheet.is-scrolly .check-foot { box-shadow: 0 -1px 0 var(--line); }
+.check-foot::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 22px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--surface));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.check-sheet.is-more .check-foot::before { opacity: 1; }
+/* "More below" sits on the fade, just above the buttons, and only shows while there's more to read */
+.check-more {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 10px 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-chip);
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(40, 30, 20, 0.12);
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+}
+.check-more::after { content: ''; position: absolute; inset: -8px -4px; }
+.check-sheet.is-more .check-more { opacity: 1; visibility: visible; }
+.check-more:active { background: var(--card); }
+/* These two look small, but the ::after stretches the tap area to 44px (the inset counts from inside the border) */
+.check-foot .check-later, .check-foot .done-undo { min-height: 2.5rem; margin-top: -4px; }
+.check-foot .check-later::after, .check-foot .done-undo::after { content: ''; position: absolute; inset: -4px 0; }
+
+.check-sheet.is-rising { animation: check-rise 380ms var(--ease-ios) both; }
+.check-sheet.is-morphing { transition: transform 300ms var(--ease-ios); }
+.check-sheet.is-dragging { transition: none; }
+.check-sheet.is-leaving { transform: translateY(105%) !important; transition: transform 200ms cubic-bezier(0.4, 0, 1, 1); }
+.check-sheet.is-nudged { animation: check-nudge 380ms var(--ease-out); }
+.check-sheet.swap-fwd .check-scroll, .check-sheet.swap-fwd .check-foot { animation: check-swap-fwd 280ms var(--ease-out) both; }
+.check-sheet.swap-back .check-scroll, .check-sheet.swap-back .check-foot { animation: check-swap-back 280ms var(--ease-out) both; }
+@keyframes check-rise { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes check-nudge {
+  0% { transform: none; }
+  30% { transform: translateY(-12px); }
+  65% { transform: translateY(3px); }
+  100% { transform: none; }
+}
+@keyframes check-swap-fwd { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+@keyframes check-swap-back { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
+
+/* Sheet header: purple NeedCheck mark, where it came from, close */
+.check-head { display: flex; align-items: center; gap: 12px; margin: 2px -10px 0 0; }
+.check-head-text { flex: 1; min-width: 0; }
+.check-brand { font-size: 0.9375rem; font-weight: 600; line-height: 1.25; color: var(--accent); }
+.check-from { font-size: 0.8125rem; line-height: 1.3; color: var(--muted); }
+.check-close { position: relative; color: var(--ink-2); }
+.check-close::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--card);
+}
+.check-close .icon { position: relative; width: 20px; height: 20px; }
+.check-close:active:not(:disabled) { background: transparent; }
+.check-close:active::before { background: var(--line); }
+
+.check-title { max-width: 16rem; margin-top: 14px; text-wrap: pretty; }
+.check-sub { margin-top: 6px; font-size: 0.9375rem; line-height: 1.4; color: var(--ink-2); }
+
+.check-asks { margin: 8px 0 12px; }
+.ask-row.row { gap: 14px; padding: 9px 0; }
+.ask-row .row-title { font-size: 1rem; }
+.ask-row .row-sub { margin-top: 2px; }
+.ask-right { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; }
+.ask-why {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--accent);
+}
+
+/* "Set up rules" tip on cookie banners. The link color stays readable on peach */
+.check-tip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--peach);
+  cursor: pointer;
+}
+.check-tip-text { flex: 1; min-width: 0; font-size: 0.875rem; line-height: 1.4; color: var(--ink); }
+/* The link ends the sentence. It keeps its full 44px tap height, and the negative margin stops that
+   from stretching the line it sits on */
+.check-tip-link {
+  gap: 2px;
+  margin: -12px 0;
+  vertical-align: baseline;
+  color: var(--accent-press);
+  white-space: nowrap;
+}
+
+/* Nav row inside the sheet (choose step) */
+.check-nav {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  margin: -2px -12px 0;
+}
+.check-nav-title { text-align: center; font-size: 1.0625rem; font-weight: 600; line-height: 1.2; }
+
+.choose-title { margin-top: 14px; text-wrap: balance; }
+.choose-list { margin-top: 8px; }
+.choose-item { padding: 9px 0; }
+.choose-row { display: flex; align-items: center; gap: 12px; }
+.choose-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  border-radius: 12px;
+  text-align: left;
+}
+.choose-info:active .itile { transform: scale(0.95); }
+.choose-info .itile { transition: transform 0.12s; }
+.choose-text { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.choose-name { display: inline-flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: 600; line-height: 1.25; }
+.choose-i { color: var(--accent); }
+/* scroll-margin keeps the warning clear of the fade and "More below" when it scrolls into view */
+.choose-warn { margin-top: 10px; scroll-margin-bottom: 44px; animation: choose-warn-in 220ms var(--ease-out) both; }
+.choose-warn .banner-text { text-wrap: pretty; }
+@keyframes choose-warn-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.choose-note { margin-top: 12px; font-size: 0.875rem; line-height: 1.45; color: var(--ink-2); }
+
+/* Done step */
+.check-sheet--done .check-scroll { padding-top: 8px; }
+.done-mark {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin: 2px auto 0;
+  border-radius: 50%;
+  background: var(--green-bg);
+  color: var(--green);
+}
+.done-title { margin-top: 18px; text-align: center; text-wrap: pretty; }
+.done-when { margin-top: 6px; text-align: center; font-size: 0.8125rem; color: var(--muted); }
+.done-card {
+  margin-top: 18px;
+  padding: 2px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+}
+.done-line {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 12px 0;
+}
+.done-line + .done-line { border-top: 1px solid var(--line); }
+.done-key { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: 600; line-height: 1.4; }
+.done-key--yes { color: var(--green-ink); }
+.done-key--no { color: var(--red); }
+.done-val { font-size: 0.9375rem; line-height: 1.35; }
+
+.done-rule { display: flex; align-items: flex-start; gap: 14px; margin-top: 18px; }
+.done-rule .checkbox { margin-top: 1px; }
+.done-rule-text { display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
+.done-rule-title { font-size: 1rem; font-weight: 600; line-height: 1.3; }
+.done-rule-sub { font-size: 0.8125rem; line-height: 1.4; color: var(--ink-2); }
+.done-has-rule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--green-ink);
+}
+.done-receipt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+.done-receipt-icon { margin-right: 6px; color: var(--accent); }
+.done-receipt-link { font-size: 0.9375rem; }
+.check-sheet--done .check-tip { margin: 14px 0 0; }
+
+/* Why pop-up */
+.why-sheet .sheet__body { padding-top: 0; }
+.why-nav {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  margin: 0 -12px;
+}
+.why-nav-title { text-align: center; font-size: 1.0625rem; font-weight: 600; line-height: 1.2; }
+.why-top { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.why-title { margin-top: 18px; text-wrap: pretty; }
+.why-part { margin-top: 18px; }
+.why-label { font-size: 0.8125rem; font-weight: 600; line-height: 1.3; color: var(--accent); }
+.why-text { margin-top: 6px; font-size: 1rem; line-height: 1.45; color: var(--ink); }
+.why-part .dots { margin-top: 10px; }
+.why-rate { margin-top: 8px; }
+/* The "asks" dots take the verdict's color: red for Not needed (like DP3), amber for Optional and
+   green for Needed, where asking is normal. The key under the dots picks up the same colors */
+.why-sheet--needed .dot--yes { background: var(--green); }
+.why-sheet--needed .dot--no { background: var(--box); }
+.why-sheet--optional .dot--yes { background: var(--amber); }
+.why-sheet--optional .dot--no { background: var(--box); }
+.why-dots-key { display: flex; gap: 16px; margin-top: 8px; font-size: 0.8125rem; color: var(--ink-2); }
+.why-key { display: inline-flex; align-items: center; gap: 6px; }
+.why-dots-key .dot { flex: none; width: 10px; height: 10px; }
+
+/* Requests inbox */
+.requests-lead { margin-bottom: 20px; }
+.check-nowrap { white-space: nowrap; }
+.requests-card .row-title, .requests-card .row-sub { text-wrap: pretty; }
+.requests-card .row-title { font-size: 0.9688rem; }
+.requests-card .empty { padding: 26px 20px; }
