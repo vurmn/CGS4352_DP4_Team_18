@@ -1,0 +1,208 @@
+/* Inputs and small pieces: toggles, checkboxes, chips, tiles, stepper, form fields, dots.
+   Sizes follow the DP3 Figma file. */
+
+/* Toggle (51 x 31 like iOS). The ::after makes the tap area at least 44px tall. */
+.toggle {
+  position: relative;
+  flex: none;
+  width: 51px;
+  height: 31px;
+  border-radius: 16px;
+  background: var(--line-2);
+  transition: background-color 0.18s ease;
+}
+.toggle::after { content: ''; position: absolute; inset: -7px -4px; }
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s var(--ease-out);
+}
+.toggle[aria-checked="true"] { background: var(--primary); }
+.toggle[aria-checked="true"] .toggle-knob { transform: translateX(20px); }
+.toggle:active:not(:disabled) .toggle-knob { width: 31px; }
+.toggle[aria-checked="true"]:active:not(:disabled) .toggle-knob { transform: translateX(16px); }
+.toggle:disabled { opacity: 0.45; }
+
+/* Checkbox */
+.checkbox {
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: 2px solid var(--box);
+  background: var(--surface);
+  color: #fff;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.checkbox::after { content: ''; position: absolute; inset: -11px; }
+.checkbox .icon { opacity: 0; transform: scale(0.6); transition: opacity 0.12s, transform 0.15s var(--ease-out); }
+.checkbox[aria-checked="true"] { background: var(--primary); border-color: var(--primary); }
+.checkbox[aria-checked="true"] .icon { opacity: 1; transform: none; }
+.checkbox:disabled { opacity: 0.45; }
+
+/* Chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  height: 1.5rem;
+  padding: 0 10px;
+  border-radius: var(--r-chip);
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+.chip .icon { width: 13px; height: 13px; margin-left: -2px; }
+.chip--green { background: var(--green-bg); color: var(--green-ink); }
+.chip--amber { background: var(--amber-bg); color: var(--amber); }
+.chip--red { background: var(--red-bg); color: var(--red); }
+.chip--gray { background: var(--line); color: var(--ink-2); }
+.chip--cream { background: var(--card); color: var(--ink-2); }
+.chip--peach { background: var(--peach); color: var(--accent-press); }
+.chip--accent { background: var(--accent); color: #fff; }
+.chip--new { background: var(--new); color: #fff; }
+.chip--primary-soft { background: var(--primary-soft); color: var(--primary); }
+.chip--dark { background: var(--dark); color: #fff; }
+.chip--white { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+
+/* Filter chips: one row that scrolls sideways with no scrollbar */
+.fchips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  margin: -6px calc(-1 * var(--pad));
+  padding: 6px var(--pad); /* room for the chips' taller tap area, overflow would clip it */
+  scroll-padding: 0 var(--pad);
+}
+.fchips::-webkit-scrollbar { display: none; }
+/* keeps the right padding when scrolled to the end */
+.fchips::after { content: ''; flex: 0 0 1px; }
+.fchip {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 2.125rem;
+  padding: 0 14px;
+  border-radius: var(--r-chip);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.fchip::after { content: ''; position: absolute; inset: -6px -2px; } /* 32 + 12 = 44, it counts from inside the border */
+.fchip:active { background: var(--card); }
+.fchip-count { font-size: 0.75rem; font-weight: 600; color: var(--muted); }
+.fchip[aria-pressed="true"] { background: var(--dark); border-color: var(--dark); color: #fff; }
+.fchip[aria-pressed="true"] .fchip-count { color: var(--on-dark); }
+
+/* App tiles: size, radius and brand color come from controls.js */
+.app-tile {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  color: #fff;
+  background: var(--ink-2);
+}
+
+/* Icon tiles, tinted by tone */
+.itile {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  background: var(--card);
+  color: var(--ink-2);
+}
+.itile--circle { border-radius: 50%; }
+.itile--square { border-radius: var(--r-tile); }
+.itile--red { background: var(--red-bg); color: var(--red); }
+.itile--amber { background: var(--amber-bg); color: var(--amber); }
+.itile--green { background: var(--green-bg); color: var(--green); }
+.itile--cream { background: var(--card); color: var(--ink-2); }
+.itile--peach { background: var(--peach); color: var(--accent); }
+.itile--white { background: var(--surface); color: var(--accent); box-shadow: 0 1px 2px rgba(60, 45, 30, 0.08); }
+.itile--accent { background: var(--accent); color: #fff; }
+.itile--dark { background: var(--dark); color: #fff; }
+.itile--brand { background: var(--brand); color: #fff; }
+.itile--primary { background: var(--primary-soft); color: var(--primary); }
+/* white tiles on the green cards: dark green icon on Home's rules card, green on "Rules are on" */
+.itile--white-primary { background: var(--surface); color: var(--primary); box-shadow: 0 1px 2px rgba(60, 45, 30, 0.08); }
+.itile--white-green { background: var(--surface); color: var(--green); box-shadow: 0 1px 2px rgba(60, 45, 30, 0.08); }
+
+/* Stepper: segmented bar plus the "Step 2 of 3 · Contact info" label, sentence case like the other labels */
+.stepper-bars { display: flex; gap: 8px; }
+.stepper-bar { flex: 1; height: 5px; border-radius: 3px; background: var(--line); transition: background-color 0.2s; }
+.stepper-bar.is-done { background: var(--accent); }
+.stepper-label {
+  margin-top: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Form fields */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field + .field { margin-top: 16px; }
+.field-label { font-size: 0.875rem; font-weight: 600; color: var(--ink); }
+.field-control { position: relative; display: flex; align-items: center; }
+.field-input {
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0 16px;
+  border: 1.5px solid var(--line-2);
+  border-radius: var(--r-input);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1rem; /* 16px or more stops iOS from zooming in on focus */
+  line-height: 1.4;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+textarea.field-input { min-height: 8rem; padding: 12px 16px; line-height: 1.5; resize: vertical; }
+.field-input::placeholder { color: var(--muted); opacity: 1; }
+.field-input:focus,
+.field-input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.field-input:disabled { background: var(--card); color: var(--muted); }
+.field--reveal .field-input { padding-right: 52px; }
+.field-reveal { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); color: var(--ink-2); }
+.field-hint { font-size: 0.8125rem; color: var(--muted); line-height: 1.4; }
+.field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--red);
+  line-height: 1.4;
+}
+.field-error .icon { margin-top: 1px; }
+.field--error .field-input { border-color: var(--red); }
+.field--error .field-input:focus { box-shadow: 0 0 0 3px var(--red-bg); }
+
+/* "What similar apps do" dots: red asked, green didn't */
+.dots { display: flex; flex-direction: column; gap: 10px; }
+.dots-row { display: flex; gap: 8px; }
+.dot { flex: 0 1 26px; aspect-ratio: 1; min-width: 0; border-radius: 50%; background: var(--green); }
+.dot--yes { background: var(--red); }
+.dots-text { font-size: 0.9375rem; line-height: 1.4; color: var(--ink); }
