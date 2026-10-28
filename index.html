@@ -1,87 +1,661 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>NeedCheck</title>
-  <meta name="description" content="NeedCheck explains what apps and sites ask for in plain words, answers for you with privacy rules you set once, and keeps receipts of everything you shared.">
-  <meta name="theme-color" content="#FAF8F5">
-  <meta name="color-scheme" content="light">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="NeedCheck">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeedCheck - Temple Run</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+  <style>
+    /* GENERAL PAGE STYLING */
 
-  <!-- shared look first, then one file per feature -->
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/controls.css">
-  <link rel="stylesheet" href="css/overlays.css">
-  <link rel="stylesheet" href="css/account.css">
-  <link rel="stylesheet" href="css/help.css">
-  <link rel="stylesheet" href="css/onboarding.css">
-  <link rel="stylesheet" href="css/home.css">
-  <link rel="stylesheet" href="css/check.css">
-  <link rel="stylesheet" href="css/rules.css">
-  <link rel="stylesheet" href="css/requests.css">
-  <link rel="stylesheet" href="css/receipts.css">
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #e9e6e0;
+      color: #202020;
+      font-family: Arial, sans-serif;
+    }
+
+    .phone {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: auto;
+      padding: 28px 20px 40px;
+      background: #faf8f5;
+    }
+
+    .screen[hidden] {
+      display: none;
+    }
+
+    h1, h2 {
+      font-family: Georgia, serif;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin: 4px 0 24px;
+    }
+
+    h2 {
+      font-size: 27px;
+      line-height: 1.15;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 20px 0 10px;
+    }
+
+    p {
+      line-height: 1.45;
+    }
+
+    .muted {
+      color: #6e6a63;
+      font-size: 13px;
+    }
+
+    /* HOME SCREEN */
+
+    .stats {
+      background: #202020;
+      color: white;
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .stats strong {
+      display: block;
+      font-size: 27px;
+      font-family: Georgia, serif;
+    }
+
+    .stats span {
+      display: block;
+      font-size: 11px;
+      color: #d9d9d9;
+      margin-top: 5px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e8e3db;
+      border-radius: 13px;
+      padding: 15px;
+      margin: 12px 0;
+    }
+
+    .priority {
+      width: 100%;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .priority small {
+      display: block;
+      font-weight: 400;
+      color: #706d67;
+      margin-top: 5px;
+    }
+
+    /* BUTTONS */
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .primary, .secondary {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #296317;
+      color: white;
+      border: none;
+    }
+
+    .secondary {
+      background: white;
+      color: #232323;
+      border: 1px solid #dfd8cd;
+    }
+
+    .back, .why {
+      border: none;
+      background: transparent;
+      color: #b45123;
+      padding: 10px 0;
+      font-weight: 700;
+    }
+
+    .eyebrow {
+      color: #b65525;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* PERMISSION REQUESTS */
+
+    .permission {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid #eee8df;
+    }
+
+    .permission:last-child {
+      border: none;
+    }
+
+    .permission strong,
+    .permission small {
+      display: block;
+    }
+
+    .permission small {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #6f6d68;
+    }
+
+    .right {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .right .why {
+      display: block;
+      margin-left: auto;
+      font-size: 12px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 5px 7px;
+      border-radius: 20px;
+      font-weight: 700;
+    }
+
+    .red {
+      background: #fee2df;
+      color: #b53029;
+    }
+
+    .yellow {
+      background: #fff0c4;
+      color: #8b6b00;
+    }
+
+    .green {
+      background: #d9f0df;
+      color: #256b44;
+    }
+
+    .tip, .success {
+      background: #dff2e3;
+      color: #23643d;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 18px 0;
+    }
+
+    /* MANUAL PERMISSION CONTROLS */
+
+    .choice {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid #eee8df;
+    }
+
+    .choice input {
+      width: 24px;
+      height: 24px;
+      accent-color: #296317;
+      cursor: pointer;
+    }
+
+    .choice small {
+      display: block;
+      margin-top: 4px;
+      color: #777;
+    }
+
+    #result {
+      padding-left: 20px;
+      line-height: 1.9;
+    }
+  </style>
 </head>
-<body>
-  <div class="stage">
-    <aside class="side" aria-label="About this demo" hidden></aside>
 
-    <div class="device">
-      <div class="app" id="app">
-        <div class="statusbar" aria-hidden="true">
-          <span class="statusbar-time">9:41</span>
-          <span class="statusbar-icons">
-            <span class="sb-signal"><i></i><i></i><i></i><i></i></span>
-            <span class="sb-battery"><i></i></span>
-          </span>
+<body>
+  <main class="phone">
+
+    <!-- SCREEN 1: HOME -->
+
+    <section class="screen" id="home">
+      <p class="muted">Good evening,</p>
+      <h1>Jordan</h1>
+
+      <div class="stats">
+        <div>
+          <strong id="checkedCount">0</strong>
+          <span>asks checked</span>
+        </div>
+        <div>
+          <strong id="receiptCount">0</strong>
+          <span>receipts saved</span>
+        </div>
+        <div>
+          <strong id="waitingCount">1</strong>
+          <span>waiting for you</span>
+        </div>
+      </div>
+
+      <h3>Priority</h3>
+
+      <button class="card priority"
+              onclick="showScreen('check')">
+        Temple Run is asking for 4 things
+        <small>Check before you allow</small>
+      </button>
+
+      <p class="muted" id="savedStatus">
+        No decision saved yet.
+      </p>
+    </section>
+
+
+    <!-- SCREEN 2: REVIEW PERMISSIONS -->
+
+    <section class="screen" id="check" hidden>
+      <button class="back"
+              onclick="showScreen('home')">
+        &larr; Home
+      </button>
+
+      <p class="eyebrow">NEEDCHECK / TEMPLE RUN</p>
+
+      <h2>Temple Run is asking for 4 things</h2>
+
+      <p class="muted">
+        Here's what the game actually needs to work.
+      </p>
+
+      <div class="card">
+
+        <div class="permission">
+          <div>
+            <strong>Location</strong>
+            <small>For a nearby leaderboard</small>
+          </div>
+          <div class="right">
+            <span class="tag red">Not needed</span>
+            <button class="why"
+                    onclick="showWhy('location')">
+              Why?
+            </button>
+          </div>
         </div>
 
-        <main id="view">
-          <noscript>
-            <div class="noscript">
-              <p class="title-lg">NeedCheck needs JavaScript</p>
-              <p class="lead">Turn JavaScript on in your browser settings, then reload this page.</p>
-            </div>
-          </noscript>
-        </main>
+        <div class="permission">
+          <div>
+            <strong>Contacts</strong>
+            <small>To find friends who play</small>
+          </div>
+          <div class="right">
+            <span class="tag red">Not needed</span>
+            <button class="why"
+                    onclick="showWhy('contacts')">
+              Why?
+            </button>
+          </div>
+        </div>
 
-        <nav class="tabbar" id="tabbar" aria-label="Tabs" hidden></nav>
+        <div class="permission">
+          <div>
+            <strong>Notifications</strong>
+            <small>Daily rewards and events</small>
+          </div>
+          <div class="right">
+            <span class="tag yellow">Optional</span>
+            <button class="why"
+                    onclick="showWhy('notifications')">
+              Why?
+            </button>
+          </div>
+        </div>
+
+        <div class="permission">
+          <div>
+            <strong>Email</strong>
+            <small>Saves your game progress</small>
+          </div>
+          <div class="right">
+            <span class="tag green">Needed</span>
+            <button class="why"
+                    onclick="showWhy('email')">
+              Why?
+            </button>
+          </div>
+        </div>
+
       </div>
-    </div>
-  </div>
 
-  <!-- every file only registers things; app.js runs last and starts the router -->
-  <script defer src="js/core/dom.js"></script>
-  <script defer src="js/core/icons.js"></script>
-  <script defer src="js/core/controls.js"></script>
-  <script defer src="js/core/router.js"></script>
-  <script defer src="js/core/store.js"></script>
-  <script defer src="js/core/ui.js"></script>
-  <script defer src="js/data/users.js"></script>
-  <script defer src="js/data/apps.js"></script>
-  <script defer src="js/data/requests.js"></script>
-  <script defer src="js/data/rules.js"></script>
-  <script defer src="js/data/receipts.js"></script>
-  <script defer src="js/screens/account.js"></script>
-  <script defer src="js/screens/help.js"></script>
-  <script defer src="js/screens/onboarding.js"></script>
-  <script defer src="js/screens/home.js"></script>
-  <script defer src="js/screens/check.js"></script>
-  <script defer src="js/screens/rules.js"></script>
-  <script defer src="js/screens/requests.js"></script>
-  <script defer src="js/screens/receipts.js"></script>
-  <!-- QR code for the desktop side panel only, async so it never holds up the app -->
-  <script async id="qr-lib" src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script defer src="js/app.js"></script>
+      <div class="tip">
+        Saying no to the red items won't limit the
+        game features in this example.
+      </div>
+
+      <button class="primary"
+              onclick="useRecommended()">
+        Allow only what's needed
+      </button>
+
+      <button class="secondary"
+              onclick="showScreen('choose')">
+        Choose for myself
+      </button>
+    </section>
+
+
+    <!-- SCREEN 3: WHY EXPLANATIONS -->
+
+    <section class="screen" id="why" hidden>
+      <button class="back"
+              onclick="showScreen('check')">
+        &larr; Back to requests
+      </button>
+
+      <p class="eyebrow">WHY DOES IT ASK?</p>
+
+      <h2 id="whyTitle"></h2>
+
+      <div class="card">
+        <h3>What the game wants</h3>
+        <p id="whyWants"></p>
+
+        <h3>Do you need to allow it?</h3>
+        <p id="whyNeed"></p>
+
+        <h3>If you say no</h3>
+        <p id="whyNo"></p>
+      </div>
+
+      <button class="primary"
+              onclick="showScreen('check')">
+        Got it
+      </button>
+    </section>
+
+
+    <!-- SCREEN 4: CHOOSE PERMISSIONS -->
+
+    <section class="screen" id="choose" hidden>
+      <button class="back"
+              onclick="showScreen('check')">
+        &larr; Back to requests
+      </button>
+
+      <p class="eyebrow">YOUR CHOICES</p>
+
+      <h2>What should Temple Run get?</h2>
+
+      <p class="muted">
+        Check a box to allow that information
+        in this demo.
+      </p>
+
+      <div class="card">
+
+        <label class="choice">
+          <span>Location<small>Not needed</small></span>
+          <input id="location" type="checkbox">
+        </label>
+
+        <label class="choice">
+          <span>Contacts<small>Not needed</small></span>
+          <input id="contacts" type="checkbox">
+        </label>
+
+        <label class="choice">
+          <span>Notifications<small>Optional</small></span>
+          <input id="notifications" type="checkbox">
+        </label>
+
+        <label class="choice">
+          <span>
+            Email
+            <small>Needed to save progress in this scenario</small>
+          </span>
+          <input id="email" type="checkbox" checked>
+        </label>
+
+      </div>
+
+      <button class="primary"
+              onclick="saveChoices()">
+        Save my choices
+      </button>
+    </section>
+
+
+    <!-- SCREEN 5: COMPLETION -->
+
+    <section class="screen" id="done" hidden>
+      <div class="success">
+        <h2>Choices saved</h2>
+        <p>
+          Your Temple Run privacy decision
+          has been recorded in NeedCheck.
+        </p>
+      </div>
+
+      <h3>Your receipt</h3>
+
+      <div class="card">
+        <ul id="result"></ul>
+      </div>
+
+      <p class="muted">
+        Demo only: this doesn't change real phone permissions.
+      </p>
+
+      <button class="primary"
+              onclick="showScreen('home')">
+        Back to Home
+      </button>
+    </section>
+
+  </main>
+
+
+  <script>
+    // BASIC SETTINGS
+
+    const storageKey = 'needcheck-temple-run';
+
+    const names = [
+      'location',
+      'contacts',
+      'notifications',
+      'email'
+    ];
+
+
+    // EXPLANATIONS FOR EACH PERMISSION
+
+    const explanations = {
+      location: {
+        title: 'Location',
+        wants: 'Your precise location for a nearby leaderboard.',
+        need: 'Not needed. The game can show a global leaderboard instead.',
+        no: 'The game still works. You will see global rankings.'
+      },
+
+      contacts: {
+        title: 'Contacts',
+        wants: 'Access to your contacts to find friends who play.',
+        need: 'Not needed for normal gameplay.',
+        no: 'You can play without sharing your contact list.'
+      },
+
+      notifications: {
+        title: 'Notifications',
+        wants: 'Permission to send daily reward and event reminders.',
+        need: 'Optional. Alerts are not required to play.',
+        no: 'You can still open the game and play normally.'
+      },
+
+      email: {
+        title: 'Email',
+        wants: 'Your email to save game progress in this example.',
+        need: 'Needed for the progress-saving feature in this scenario.',
+        no: 'The example game may not sync your progress.'
+      }
+    };
+
+
+    // SWITCH BETWEEN SCREENS
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.hidden = true;
+      });
+
+      document.getElementById(id).hidden = false;
+
+      window.scrollTo(0, 0);
+    }
+
+
+    // DISPLAY WHY AN APP WANTS PERMISSION
+
+    function showWhy(permission) {
+      const info = explanations[permission];
+
+      document.getElementById('whyTitle').textContent =
+        info.title;
+
+      document.getElementById('whyWants').textContent =
+        info.wants;
+
+      document.getElementById('whyNeed').textContent =
+        info.need;
+
+      document.getElementById('whyNo').textContent =
+        info.no;
+
+      showScreen('why');
+    }
+
+
+    // AUTOMATIC RECOMMENDED PERMISSIONS
+
+    function useRecommended() {
+      names.forEach(name => {
+        document.getElementById(name).checked =
+          (name === 'email');
+      });
+
+      saveChoices();
+    }
+
+
+    // SAVE USER PERMISSION SELECTIONS
+
+    function saveChoices() {
+      const choices = {};
+
+      names.forEach(name => {
+        choices[name] =
+          document.getElementById(name).checked;
+      });
+
+      try {
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify(choices)
+        );
+      } catch (error) {
+        console.warn('Browser storage unavailable:', error);
+      }
+
+      updateReceipt(choices);
+
+      showScreen('done');
+    }
+
+
+    // UPDATE RECEIPT AND HOME SCREEN
+
+    function updateReceipt(choices) {
+      const result = document.getElementById('result');
+
+      result.replaceChildren();
+
+      names.forEach(name => {
+        const item = document.createElement('li');
+
+        const label =
+          name[0].toUpperCase() + name.slice(1);
+
+        item.textContent =
+          label + ': ' +
+          (choices[name] ? 'Allowed' : 'Declined');
+
+        result.appendChild(item);
+      });
+
+      document.getElementById('savedStatus').textContent =
+        'Temple Run decision saved. Tap to review or change it.';
+
+      document.getElementById('checkedCount').textContent = '1';
+      document.getElementById('receiptCount').textContent = '1';
+      document.getElementById('waitingCount').textContent = '0';
+    }
+
+
+    // LOAD SAVED CHOICES WHEN PAGE REOPENS
+
+    try {
+      const previous =
+        JSON.parse(localStorage.getItem(storageKey));
+
+      if (
+        previous &&
+        names.every(name => typeof previous[name] === 'boolean')
+      ) {
+        names.forEach(name => {
+          document.getElementById(name).checked =
+            previous[name];
+        });
+
+        updateReceipt(previous);
+      }
+    } catch (error) {
+      console.warn('No previous demo choices loaded:', error);
+    }
+
+  </script>
 </body>
 </html>
