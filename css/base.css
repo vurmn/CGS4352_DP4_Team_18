@@ -159,7 +159,6 @@ a { color: var(--accent); }
 
 /* Phone first: the app simply fills the screen */
 .stage { height: 100%; }
-.side { display: none; }
 .device { height: 100%; }
 
 .app {
@@ -186,14 +185,14 @@ html, body { overflow: hidden; }
 
 /* Phones on their side or tablets that stay full screen: keep it phone shaped */
 @media (min-width: 600px) and (max-width: 760px), (min-width: 761px) and (max-height: 559px) {
-  body { background: var(--page); }
+  body { background: #fff; }
   .app { max-width: 480px; margin: 0 auto; box-shadow: 0 0 0 1px var(--line); }
 }
 
-/* Desktop: the app sits in a phone frame with a side panel. Keep in sync with DESKTOP_MQ in app.js */
+/* Desktop: the app sits in a phone frame. Keep in sync with DESKTOP_MQ in app.js */
 @media (min-width: 761px) and (min-height: 560px) {
   html, body { overflow: auto; }
-  body { background: var(--page); }
+  body { background: #fff; }
 
   .stage {
     min-height: 100%;
@@ -264,17 +263,6 @@ html, body { overflow: hidden; }
   .app[data-status="light"] .statusbar { color: #fff; }
   /* Dark screens often end in a white sheet, so a mid tone reads on both */
   .app[data-status="light"]::after { background: var(--faint); }
-
-  .side {
-    display: block;
-    grid-column: 1;
-    justify-self: end;
-    width: 280px;
-  }
-}
-
-@media (min-width: 761px) and (max-width: 1099px) {
-  .side { display: none; }
 }
 
 /* Status bar glyphs drawn in CSS so they follow the text color */
@@ -305,29 +293,6 @@ html, body { overflow: hidden; }
   background: currentColor;
 }
 .sb-battery i { display: block; height: 100%; width: 100%; border-radius: 1.5px; background: currentColor; }
-
-/* Desktop side panel */
-.side-inner { display: flex; flex-direction: column; gap: 18px; }
-.side-brand { display: flex; align-items: center; gap: 12px; }
-.side-name { font-family: var(--font-serif); font-weight: 600; font-size: 1.75rem; letter-spacing: -0.01em; }
-.side-desc { color: var(--ink-2); font-size: 0.9688rem; line-height: 1.5; }
-.side-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  box-shadow: var(--shadow-card);
-}
-.side-card-title { font-weight: 600; font-size: 0.9375rem; line-height: 1.35; }
-.side-qr { width: 148px; height: 148px; }
-.side-qr img, .side-qr canvas { width: 148px !important; height: 148px !important; }
-.side-note { font-size: 0.8125rem; color: var(--muted); line-height: 1.4; }
-.side-url { word-break: break-all; }
-.side-reset { align-self: flex-start; }
 
 /* The NeedCheck mark: white shield on a purple rounded square */
 .app-mark {
