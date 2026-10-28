@@ -1,0 +1,400 @@
+/* toasts, bottom sheets and the confirm dialog. ui.js puts them all in .overlays inside .app */
+
+/* sits under the fake status bar and home indicator on desktop, like a real phone */
+.overlays {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-overlay);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* toast */
+
+.toast-region {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  /* --safe-top is the notch on phones and the fake status bar on desktop.
+     ui.js sets --toast-top to drop it under the nav bar (or the Home avatar) */
+  top: var(--toast-top, calc(var(--safe-top) + 8px));
+  z-index: 100;
+  display: grid;
+  pointer-events: none;
+  transition: top 200ms var(--ease-out);
+}
+
+.toast-region.no-slide {
+  transition: none;
+}
+
+/* old and new toast share one grid cell so a replacement doesn't jump */
+.toast {
+  grid-area: 1 / 1;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--success-toast);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.35;
+  box-shadow: var(--shadow-pop);
+  cursor: default;
+  opacity: 0;
+  transform: translateY(-14px) scale(0.98);
+  transition: opacity var(--dur-fade) ease, transform 240ms var(--ease-out);
+}
+
+.toast.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.toast.is-out {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.toast--info {
+  background: var(--dark);
+}
+
+.toast--error {
+  background: var(--red);
+}
+
+.toast--has-action {
+  padding: 2px 4px 2px 16px;
+}
+
+.toast__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+}
+
+.toast__msg {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 0;
+}
+
+/* outlined so the label keeps full contrast on every toast color */
+.toast__action {
+  flex: none;
+  min-width: 64px;
+  height: 44px;
+  margin: 0;
+  padding: 0 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toast__action:active {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.toast__action:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* bottom sheet */
+
+.sheet-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: auto;
+}
+
+.sheet-layer.is-closing {
+  pointer-events: none;
+}
+
+.sheet-backdrop,
+.confirm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity var(--dur-sheet) ease;
+}
+
+.sheet-layer.is-open .sheet-backdrop,
+.confirm-layer.is-open .confirm-backdrop {
+  opacity: 1;
+}
+
+/* a second sheet on top only dims a little more */
+.sheet-layer.is-stacked .sheet-backdrop {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 92%;
+  padding-bottom: var(--safe-bottom);
+  border-radius: 24px 24px 0 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 -6px 28px rgba(28, 28, 28, 0.14);
+  outline: none;
+  transform: translateY(100%);
+  transition: transform var(--dur-sheet) var(--ease-ios);
+  will-change: transform;
+}
+
+.sheet-layer.is-open .sheet {
+  transform: translateY(0);
+}
+
+.sheet--tall {
+  height: 92%;
+}
+
+.sheet.is-dragging {
+  transition: none;
+}
+
+.sheet__grab {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  height: 22px;
+  padding-top: 9px;
+  touch-action: none;
+  cursor: grab;
+}
+
+.sheet__grabber {
+  width: 36px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line-2);
+}
+
+.sheet__head {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 12px 6px var(--pad);
+  touch-action: none;
+}
+
+.sheet__title {
+  flex: 1;
+  margin: 0;
+  padding-top: 6px;
+  font-family: var(--font-serif);
+  font-size: 1.5625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+/* 44px tap target with a smaller round chip inside */
+.sheet__close {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.sheet__close::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--card);
+}
+
+.sheet__close .icon {
+  position: relative;
+}
+
+.sheet__close:active::before {
+  background: var(--line);
+}
+
+.sheet__close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.sheet__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px var(--pad) 24px;
+}
+
+.sheet--titled .sheet__body {
+  padding-top: 2px;
+}
+
+.sheet__foot {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px var(--pad) 18px;
+  background: var(--surface);
+}
+
+.sheet--scrolls .sheet__foot {
+  box-shadow: 0 -1px 0 var(--line);
+}
+
+/* confirm dialog */
+
+.confirm-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: auto;
+}
+
+.confirm-layer.is-closing {
+  pointer-events: none;
+}
+
+.confirm-backdrop {
+  transition-duration: 200ms;
+}
+
+.confirm {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  padding: 26px 20px 20px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: center;
+  box-shadow: var(--shadow-pop);
+  outline: none;
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 160ms ease, transform 200ms var(--ease-out);
+}
+
+.confirm-layer.is-open .confirm {
+  opacity: 1;
+  transform: none;
+}
+
+.confirm__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.confirm--danger .confirm__icon {
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.confirm__title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.confirm__msg {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.confirm__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.confirm__actions > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.confirm--stack .confirm__actions {
+  flex-direction: column;
+}
+
+.confirm--stack .confirm__actions > * {
+  flex: none;
+}
+
+/* the danger button here is filled red, a bit louder than the usual text style */
+.confirm .confirm__ok--danger {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff;
+}
+
+.confirm .confirm__ok--danger:active {
+  background: var(--red);
+  filter: brightness(0.9);
+}
+
+/* no sliding or fading when people asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+  .toast-region,
+  .toast,
+  .sheet,
+  .sheet-backdrop,
+  .confirm,
+  .confirm-backdrop {
+    transition: none;
+  }
+}
+
+html.reduce-motion .toast-region,
+html.reduce-motion .toast,
+html.reduce-motion .sheet,
+html.reduce-motion .sheet-backdrop,
+html.reduce-motion .confirm,
+html.reduce-motion .confirm-backdrop {
+  transition: none;
+}

@@ -1,0 +1,238 @@
+/* account screens: welcome, log in, sign up, account settings and the about sheet.
+   only layout on top of base.css and controls.css, colors always come from the tokens */
+
+/* welcome */
+
+.wl-screen .screen-body {
+  display: flex;
+  flex-direction: column;
+  padding-top: 4px;
+}
+/* margin auto centers it when there's room and still scrolls on short phones */
+.wl-wrap { margin: auto 0; display: flex; flex-direction: column; }
+
+.wl-hero {
+  position: relative;
+  height: 15rem;
+  margin: 0 calc(-1 * var(--pad));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.wl-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.wl-ring--outer { width: 14rem; height: 14rem; border: 1.5px dashed var(--line-2); }
+.wl-ring--inner { width: 9rem; height: 9rem; background: var(--peach); }
+.wl-mark {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 24px;
+  box-shadow: 0 12px 28px rgba(80, 31, 193, 0.28);
+  animation: wl-pop 520ms var(--ease-out) both;
+}
+.wl-bit {
+  position: absolute;
+  display: flex;
+  animation: wl-pop 520ms var(--ease-out) both;
+  animation-delay: var(--d, 0ms);
+}
+.wl-bit .chip { box-shadow: 0 3px 10px rgba(60, 45, 30, 0.1); }
+.wl-bit .app-tile { box-shadow: 0 6px 14px rgba(28, 28, 28, 0.18); }
+/* rotate is its own property so the pop-in animation can still use transform */
+.wl-bit--needed { left: 9%; top: 17%; rotate: -6deg; }
+.wl-bit--notneeded { right: 6%; top: 36%; rotate: 5deg; }
+.wl-bit--optional { left: 13%; bottom: 17%; rotate: 4deg; }
+.wl-bit--temple { right: 19%; bottom: 7%; rotate: 8deg; }
+.wl-bit--walmart { right: 22%; top: 6%; rotate: -8deg; }
+
+@keyframes wl-pop {
+  from { opacity: 0; transform: translateY(10px) scale(0.85); }
+  to { opacity: 1; transform: none; }
+}
+
+.wl-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 18px;
+  text-align: center;
+}
+.wl-title { font-size: 2.5rem; }
+.wl-tagline { max-width: 19rem; }
+
+.wl-features { padding: 0 4px; }
+.wl-features > * + * { border-top: 0; }
+.wl-features .row { padding: 7px 0; }
+
+/* log in and sign up */
+
+.auth-head { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 24px; }
+.auth-form { display: flex; flex-direction: column; }
+.auth-form > .btn { margin-top: 24px; }
+.auth-form > .auth-options + .btn { margin-top: 0; }
+
+.auth-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 12px;
+  row-gap: 0;
+  margin: 10px 0 14px;
+}
+.auth-keep { display: flex; align-items: center; gap: 10px; }
+.auth-keep-label {
+  padding: 10px 0;
+  white-space: nowrap;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* on narrow phones this drops under the checkbox instead of both wrapping onto two lines */
+.auth-forgot { font-size: 0.875rem; white-space: nowrap; }
+
+.auth-demo { margin-top: 22px; padding: 4px 14px; }
+.auth-demo .row { padding: 10px 0; }
+
+.auth-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: 5px;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+.auth-switch .link { font-size: 0.9375rem; }
+.auth-fine {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.auth-instead { align-self: flex-start; min-height: 36px; margin-top: -4px; }
+
+/* quick green flash when "use the demo account" fills the boxes */
+.field.is-filled .field-input { animation: auth-flash 900ms ease-out; }
+@keyframes auth-flash {
+  from { background: var(--primary-soft); border-color: var(--primary); }
+  to { background: var(--surface); }
+}
+
+/* the live "at least 8 characters" hint */
+.pw-rule { display: flex; align-items: center; gap: 6px; transition: color 0.15s; }
+.pw-rule.is-met { color: var(--green-ink); }
+/* the red error already says the rule, so don't show it twice */
+.field--error .pw-rule { display: none; }
+
+/* busy buttons keep full color so the spinner reads, they just stop taking taps */
+.btn.is-busy:disabled { opacity: 0.88; cursor: progress; }
+.btn-spinner {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2.5px solid currentColor;
+  border-right-color: transparent;
+  animation: acct-spin 0.7s linear infinite;
+}
+@keyframes acct-spin { to { transform: rotate(360deg); } }
+
+/* short phones (iPhone SE and friends): smaller hero */
+@media (max-height: 700px) {
+  .wl-hero { height: 12.5rem; }
+  .wl-ring--outer { width: 11.5rem; height: 11.5rem; }
+  .wl-ring--inner { width: 7.5rem; height: 7.5rem; }
+  .wl-mark { width: 72px; height: 72px; border-radius: 20px; }
+  .wl-head { margin-bottom: 12px; }
+}
+
+/* really short screens (320 x 640): all three features have to clear the pinned buttons */
+@media (max-height: 660px) {
+  .wl-hero { height: 9rem; }
+  .wl-ring--outer { width: 8.75rem; height: 8.75rem; }
+  .wl-ring--inner { width: 6rem; height: 6rem; }
+  .wl-mark { width: 56px; height: 56px; border-radius: 16px; }
+  .wl-mark svg { width: 34px; height: 34px; }
+  .wl-head { gap: 6px; margin: 0 0 8px; }
+  .wl-title { font-size: 2.25rem; }
+  .wl-features .row { padding: 4px 0; }
+}
+
+/* account */
+
+.acct-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4px 0 2px;
+}
+.acct-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 5.25rem;
+  height: 5.25rem;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: var(--peach);
+  color: var(--accent);
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+/* long names and emails wrap instead of pushing the screen sideways */
+.acct-name { overflow-wrap: anywhere; }
+.acct-email { margin-top: 2px; font-size: 0.9375rem; color: var(--ink-2); overflow-wrap: anywhere; }
+.acct-since { margin-top: 4px; font-size: 0.8125rem; color: var(--muted); }
+
+.acct-screen .section { margin-top: 22px; }
+.acct-group { padding: 0 14px; }
+.acct-group > .list { margin: 0; }
+/* iOS style dividers that start after the icon */
+.acct-group .list > * + * { border-top: 0; }
+.acct-group .row { position: relative; min-height: 3.5rem; padding: 9px 0; gap: 12px; }
+.acct-group .row + .row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 46px;
+  right: 0;
+  border-top: 1px solid var(--line);
+}
+.acct-group .row-title { font-weight: 500; }
+.acct-group .row--tap:active { background: transparent; }
+.acct-group .row--tap:active .row-main,
+.acct-group .row--tap:active .row-left { opacity: 0.6; }
+.acct-danger .row-title { color: var(--red); }
+.acct-end { margin-top: 24px; }
+.acct-foot { margin-top: 20px; text-align: center; font-size: 0.8125rem; color: var(--muted); }
+
+.acct-edit-pic { display: flex; justify-content: center; margin: 8px 0 22px; }
+.acct-avatar--edit { margin: 0; }
+.acct-edit-lead { margin: 4px 0 22px; }
+
+/* sheet basics our about and forgot password sheets share with the help pop-ups (help.css adds the rest) */
+
+.help-top { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 14px; }
+.help-title { margin-bottom: 8px; }
+.help-text { font-size: 1rem; line-height: 1.5; color: var(--ink); }
+.help-text + .help-text { margin-top: 10px; }
+.help-small { margin-top: 16px; font-size: 0.8125rem; line-height: 1.45; color: var(--muted); }
+
+.about-lines { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.about-line { display: flex; align-items: center; gap: 12px; font-size: 0.9375rem; line-height: 1.4; }
