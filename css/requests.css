@@ -1,0 +1,143 @@
+/* delete request screens, "make this a rule?" and cleanup (for task 3) */
+
+.dr-title { margin-top: 2px; }
+.dr-lead { margin-top: 6px; text-wrap: balance; }
+
+/* what to delete */
+/* the tip keeps "Select all" / "Clear" from sitting alone at the edge, like take back */
+.dr-all { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 2px 0 2px; }
+.dr-all-tip { font-size: 0.8125rem; color: var(--muted); line-height: 1.35; }
+.dr-all .link { flex: none; }
+.dr-all .link { min-height: 40px; }
+.dr-card { padding: 2px 18px; }
+.dr-pick { min-height: 3.75rem; cursor: pointer; }
+.dr-pick .row-left { color: var(--ink-2); }
+.dr-hint { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; font-size: 0.8125rem; line-height: 1.4; color: var(--amber); }
+.dr-hint .icon { flex: none; margin-top: 1px; }
+
+.dr-why { margin-top: 22px; }
+.dr-why-label { margin-bottom: 10px; }
+.dr-reasons { display: flex; flex-wrap: wrap; gap: 12px 8px; }
+.dr-reason {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 2.125rem;
+  padding: 0 14px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-chip);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.84375rem;
+  font-weight: 500;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.dr-reason::after { content: ''; position: absolute; inset: -6px -2px; }
+.dr-reason .icon { display: none; margin-left: -4px; }
+.dr-reason:active { background: var(--card); }
+.dr-reason[aria-pressed="true"] { background: var(--dark); border-color: var(--dark); color: #fff; }
+.dr-reason[aria-pressed="true"] .icon { display: block; }
+.dr-other { margin-top: 14px; }
+.dr-other textarea.field-input { min-height: 5rem; }
+/* the "(Optional)" heading right above already labels the box, so this one is for screen readers only */
+.dr-other .field-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.dr-need { font-size: 0.8125rem; color: var(--ink-2); text-align: center; }
+
+/* letter */
+.dr-letter-card { margin-top: 16px; padding: 14px 18px 6px; }
+.dr-meta { padding-bottom: 10px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.dr-meta-row { display: flex; gap: 12px; padding: 4px 0; font-size: 0.84375rem; line-height: 1.4; }
+.dr-k { flex: none; width: 62px; color: var(--muted); }
+.dr-v { flex: 1; min-width: 0; font-weight: 500; overflow-wrap: anywhere; }
+.dr-where-wrap { padding-left: 74px; margin-bottom: 2px; }
+.dr-where {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.dr-where::after { content: ''; position: absolute; inset: -7px -4px; }
+.dr-where-text { margin-bottom: 6px; font-size: 0.8125rem; line-height: 1.4; color: var(--ink-2); }
+.dr-letter-body { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.9375rem; line-height: 1.55; color: var(--ink); }
+/* 16px so ios doesn't zoom in on focus. it grows with the text (requests.js), so no second scroll area */
+.dr-edit-field textarea.field-input { min-height: 18rem; font-size: 1rem; overflow: hidden; resize: none; }
+.dr-stale { margin: 12px 0 0; }
+.dr-edit-btns { margin-top: 10px; }
+.dr-letter-links { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0 12px; margin-top: 8px; }
+
+/* sent, the pop in is from rules.css */
+.dr-nav { flex: none; }
+.dr-sent .screen-body, .dr-done .screen-body { padding-top: 14px; }
+.dr-sent-mark {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin: 8px auto 18px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--green);
+  animation: rl-pop 460ms var(--ease-out) both;
+}
+.dr-sent-title { text-align: center; }
+.dr-sent-lead { max-width: 330px; margin: 8px auto 0; text-align: center; }
+.dr-remind-card { margin-top: 24px; padding: 12px 16px; }
+.dr-remind { display: flex; align-items: center; gap: 12px; }
+.dr-remind .row-title { font-size: 0.9375rem; }
+.dr-remind-icon { flex: none; display: flex; color: var(--ink-2); }
+.dr-remind-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.dr-rule { margin-top: 16px; padding: 18px 20px 20px; }
+.dr-rule-head { display: flex; align-items: flex-start; gap: 14px; }
+.dr-rule-text { flex: 1; min-width: 0; padding-top: 2px; }
+.dr-rule-text .card-text { margin-top: 6px; font-size: 0.875rem; }
+.dr-rule-help { position: relative; min-height: 36px; margin: 4px 0 -8px; }
+.dr-rule-help::after { content: ''; position: absolute; inset: -4px 0; }
+.dr-rule-btns { margin-top: 22px; }
+.dr-rule-btns .btn--secondary { border-color: var(--surface); }
+
+/* cleanup done */
+.dr-done-mark {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  margin: 8px auto 20px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+  animation: rl-pop 460ms var(--ease-out) both;
+}
+.dr-done-title { text-align: center; }
+.dr-done-lead { max-width: 330px; margin: 8px auto 0; text-align: center; }
+.dr-done-card { margin-top: 22px; padding: 4px 18px; }
+.dr-done-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; }
+.dr-done-row + .dr-done-row { border-top: 1px solid var(--line); }
+.dr-done-text { flex: 1; min-width: 0; padding-top: 3px; }
+.dr-done-line { font-size: 0.9688rem; font-weight: 500; line-height: 1.4; }
+.dr-done-sub { margin-top: 2px; font-size: 0.8125rem; color: var(--ink-2); }
+.dr-done-link { min-height: 36px; margin-bottom: -6px; }
+.dr-done-left .dr-done-line { font-weight: 600; }
+/* links that sit tight in a row still get a 44px tap area, "Clear" is short so it gets some width too */
+.dr-done-link, .dr-all .link { position: relative; }
+.dr-done-link::after { content: ''; position: absolute; inset: -4px 0; }
+.dr-all .link::after { content: ''; position: absolute; inset: -4px -6px; }
+
+/* short phones tighter top so the new rule and its link sit above the footer */
+@media (max-height: 760px) {
+  .dr-done .screen-body { padding-top: 6px; }
+  .dr-done-mark { width: 64px; height: 64px; margin: 4px auto 12px; }
+  .dr-done-mark .icon { width: 34px; height: 34px; }
+  .dr-done-card { margin-top: 16px; }
+  .dr-done-row { padding: 11px 0; }
+}
+
+/* "waiting on walmart" card, same shape as the other priority cards */
+.dr-home-card { overflow: hidden; }
+.dr-home-card .row { padding: 16px 16px 16px 18px; border-radius: inherit; }
+.dr-home-card .row-title { font-size: 1rem; line-height: 1.3; }
+.dr-home-card .row-sub { font-size: 0.875rem; }
