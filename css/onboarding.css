@@ -1,0 +1,199 @@
+/* Onboarding: the swipeable cards that explain the three tabs after sign up (js/screens/onboarding.js).
+   Only layout on top of base.css and controls.css, colors always come from the tokens */
+
+.ob-screen .screen-body {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  padding-right: 0;
+  /* The dots' 44px tap area already leaves room above the footer, so no extra padding under them */
+  padding-bottom: 0;
+  /* The screen sets its size, never the cards, so the rules at the bottom go by the room that's really
+     left: after the footer note, Larger text, browser toolbars or the desktop phone frame */
+  container: ob-body / size;
+}
+.ob-screen .screen-footer { padding-top: 6px; }
+.ob-wrap { margin: auto 0; }
+.ob-skip { margin-right: 4px; }
+
+/* The track slides sideways under a fixed window, one card wide */
+.ob-viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.ob-track { display: flex; transition: transform 360ms var(--ease-ios); }
+.ob-track.is-dragging { transition: none; }
+.ob-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--pad);
+}
+
+.ob-art {
+  position: relative;
+  /* About half of the room, so it shrinks a bit on short phones and the words below still fit */
+  height: clamp(15rem, 54cqh, 21rem);
+  margin-bottom: 22px;
+  border-radius: 28px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  /* Leaves room under the card for the floating pill */
+  padding-bottom: 30px;
+}
+.ob-art--peach { background: var(--peach); }
+.ob-art--green { background: var(--primary-soft); }
+.ob-art--cream { background: var(--card); }
+
+.ob-card {
+  width: min(18rem, calc(100% - 36px));
+  padding: 14px 16px 6px;
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 12px 30px rgba(60, 45, 30, 0.14);
+}
+.ob-card-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.8125rem;
+}
+.ob-brand-name { color: var(--accent); font-weight: 600; }
+.ob-brand-when { color: var(--muted); margin-left: -4px; }
+.ob-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.ob-card-title { font-size: 0.9375rem; font-weight: 600; line-height: 1.25; }
+.ob-card-sub { font-size: 0.8125rem; color: var(--ink-2); line-height: 1.3; }
+.ob-card-label { margin-top: 8px; font-size: 0.78125rem; font-weight: 600; color: var(--muted); }
+.ob-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+.ob-row + .ob-row { border-top: 1px solid var(--line); }
+.ob-row-label { flex: 1; min-width: 0; font-size: 0.875rem; font-weight: 500; line-height: 1.25; }
+/* Temple Run's four asks need a tighter card so the art still fits on shorter phones */
+.ob-card--dense .ob-row { padding: 5px 0; }
+
+/* The floating extras hint at the one thing you do on each tab */
+.ob-float { position: absolute; display: inline-flex; align-items: center; }
+.ob-float--btn {
+  right: 16px;
+  bottom: 12px;
+  gap: 6px;
+  height: 2.25rem;
+  padding: 0 14px;
+  border-radius: var(--r-chip);
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(50, 98, 26, 0.3);
+  rotate: -3deg;
+}
+.ob-float--note {
+  left: 14px;
+  bottom: 14px;
+  gap: 6px;
+  height: 2.25rem;
+  padding: 0 14px;
+  border-radius: var(--r-chip);
+  background: var(--surface);
+  color: var(--green-ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(60, 45, 30, 0.14);
+  rotate: 2deg;
+}
+.ob-float--tile { top: 14px; right: 16px; rotate: 10deg; }
+.ob-float--tile .itile { box-shadow: 0 8px 18px rgba(193, 82, 31, 0.3); }
+
+.ob-where {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.ob-title { margin-bottom: 8px; }
+
+/* The dot itself is small, but each button is a full 44px so it's easy to tap */
+.ob-dots { display: flex; justify-content: center; margin-top: 18px; }
+.ob-dot { width: 44px; height: 44px; display: grid; place-items: center; }
+.ob-dot::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line-2);
+  transition: width 0.25s var(--ease-out), background-color 0.25s;
+}
+.ob-dot.is-on::before { width: 24px; background: var(--accent); }
+.ob-dot:focus-visible { outline-offset: -8px; border-radius: 12px; }
+
+/* Tells new accounts the history they land on is demo data. It lives in the footer right above Next,
+   so it's always in view, and the footer's own padding and gap space it */
+.ob-sample {
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* Not much room (iPhone SE and friends, or Larger text): drop the brand line and tighten things up */
+@container ob-body (max-height: 33rem) {
+  .ob-card-brand { display: none; }
+  .ob-row { padding: 6px 0; }
+  .ob-card--dense .ob-row { padding: 4px 0; }
+  /* A little taller at the low end, so the mock card never touches the top of its panel */
+  .ob-art { height: clamp(16rem, 54cqh, 21rem); margin-bottom: 16px; }
+  .ob-dots { margin-top: 8px; }
+  /* Walmart's card has no pill under it, so it can use the panel's bottom space */
+  .ob-art--cream { padding-bottom: 8px; }
+  /* With Larger text the title keeps its normal size here, it's big already and a second line costs the card text */
+  html.text-lg .ob-title { font-size: 1.4167rem; }
+}
+
+/* Less room still (short phones, Larger text, browser toolbars): the picture gives up about 6% for each rem
+   that's missing, so the words, dots and button all fit without scrolling. Zoom shrinks the whole picture
+   evenly, so the mock card always stays inside its panel. Steps were measured from 320 to 430 wide */
+@container ob-body (max-height: 29rem) { .ob-art { zoom: 0.97; } }
+@container ob-body (max-height: 28rem) { .ob-art { zoom: 0.91; } }
+@container ob-body (max-height: 27rem) { .ob-art { zoom: 0.85; } }
+@container ob-body (max-height: 26rem) { .ob-art { zoom: 0.79; } }
+@container ob-body (max-height: 25rem) { .ob-art { zoom: 0.73; } }
+@container ob-body (max-height: 24rem) { .ob-art { zoom: 0.67; } }
+@container ob-body (max-height: 23rem) { .ob-art { zoom: 0.61; } }
+@container ob-body (max-height: 22rem) { .ob-art { zoom: 0.56; } }
+@container ob-body (max-height: 21rem) { .ob-art { zoom: 0.51; } }
+@container ob-body (max-height: 20rem) { .ob-art { zoom: 0.45; } }
+@container ob-body (max-height: 19rem) { .ob-art { zoom: 0.39; } }
+
+/* Very narrow phones: the labels wrap and the cards grow, so drop the last mock row and tuck the badge in */
+@media (max-width: 359px) {
+  .ob-row--extra { display: none; }
+  .ob-float--tile { top: 6px; right: 6px; scale: 0.85; }
+  .ob-art--cream .ob-card-head > div { min-width: 0; padding-right: 26px; }
+  .ob-art--cream .ob-card-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Keeps "Take back what you shared" on one line, since the tallest card sets the height for all three */
+  .ob-title { font-size: 1.375rem; }
+  .ob-sample { font-size: 0.75rem; }
+}
+
+/* Narrow and short (the first iPhone SE): a bit less art, so the card text and dots fit above the footer */
+@container ob-body (max-width: 359px) and (max-height: 33rem) {
+  .ob-art { height: 15.5rem; margin-bottom: 12px; }
+  .ob-card--dense .ob-row { padding: 3px 0; }
+  .ob-dots { margin-top: 2px; }
+  .ob-float--note { bottom: 8px; }
+  .ob-float--btn { bottom: 6px; height: 2rem; font-size: 0.75rem; }
+  html.text-lg .ob-title { font-size: 1.2222rem; }
+}
