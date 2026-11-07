@@ -1,9 +1,16 @@
 // The requests Jordan gets in the demo: four apps still waiting (Temple Run first) and a few older ones
-// they already answered. Every ask has its own plain "why" so any row can open the Why pop-up.
+// they already answered. Every ask has its own plain why so any row can open the Why pop-up.
 (function () {
   const NC = (window.NC = window.NC || {});
 
-  // Temple Run is the one we test with, so it goes first
+  // Temple Run test run
+  // each request: id / appId - which app it is (matches apps.js), 
+  // kind - permissions or cookies (website banner)
+  // receivedDaysAgo - how long ago it came in
+  // isNew - shows the New badge
+  // context - the small line about when it asked
+  // note - the reassuring banner at the top of the review sheet
+  // asks - each thing the app wants
   const WAITING = [
     {
       id: 'temple-run',
@@ -189,7 +196,7 @@
     },
   ];
 
-  // Older answers for the inbox. They're over a week old, so the "This week" numbers on Home start at 8 and 4
+  // Older answers for the inbox. They're over a week old, so the This week numbers on Home start at 8 and 4
   const ANSWERED = [
     {
       id: 'spotify',
@@ -372,7 +379,7 @@
       ],
     },
   ];
-
+  // copy so the original demo data never gets changed
   function copy(v) {
     return JSON.parse(JSON.stringify(v));
   }
