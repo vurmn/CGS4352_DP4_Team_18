@@ -9,7 +9,7 @@
   const STEPS = { review: 1, choose: 2, done: 3 };
   const TILE_TONE = { needed: 'green', optional: 'amber', not_needed: 'red' };
   const VERDICT_WORD = { needed: 'needed', optional: 'optional', not_needed: 'not needed' };
-  const GAMES_RULE = {
+  const GAMES_RULE = { // The rule we offer after a game request, so next time it's answered automatically
     id: 'games-needed-only',
     category: 'games',
     icon: 'game',
@@ -98,7 +98,7 @@
     return r.asks.filter((a) => a.verdict === 'needed').map((a) => a.type);
   }
 
-  function sameSet(a, b) {
+  function sameSet(a, b) { // True if both lists have the same items, in any order
     return a.length === b.length && a.every((x) => b.includes(x));
   }
 
@@ -199,7 +199,7 @@
   }
 
   // Changing things
-
+  // Saves the user's choices: marks the request decided, makes a receipt, shows a toast with Undo
   function decide(id, allowed, mode) {
     const before = get(id);
     if (!before || !NC.store) return null;
@@ -385,6 +385,7 @@
   }
 
   // A drag on the grabber pulls the sheet down, far enough and it closes like a real sheet
+  // Closes if dragged far enough (110px) or flicked down fast
   function enableDrag(handle, sheet, onClose) {
     let drag = null;
     handle.addEventListener('pointerdown', (e) => {
@@ -410,7 +411,7 @@
     handle.addEventListener('pointerup', end);
     handle.addEventListener('pointercancel', end);
   }
-
+  // Builds the screen every step shares: backdrop, app splash, and the sheet
   function stage(r, step, parts) {
     const app = appOf(r);
     const look = lookFor(r, app);
@@ -498,6 +499,7 @@
   }
 
   // Review step
+  // One row in the review list. Tapping it opens the Why pop-up
 
   function askRow(r, app, a) {
     const t = typeOf(a.type);
@@ -533,6 +535,7 @@
         h('button.link.check-tip-link', { type: 'button', onClick: open }, 'Set up rules', NC.icon('chev', { size: 14 }))));
   }
 
+  // the review sheet that lists what the app asks for, with the three buttons
   function reviewScreen(r) {
     const app = appOf(r);
     let el = null;
@@ -575,12 +578,13 @@
   }
 
   // Why pop-up, every row opens its own now
+  // the question at the top of the Why pop-up, like "Why does Temple Run want your location?"
 
   function whyTitle(app, a) {
     const phrase = WANT_PHRASE[a.type] || 'your ' + lower(a.type);
     return 'Why does ' + app.name + ' want ' + phrase + '?';
   }
-
+  // Opens the Why pop-up for one item: what they want, why, what happens if you say no, and what similar apps do
   function openWhy(r, a) {
     if (!NC.ui || typeof NC.ui.sheet !== 'function') return;
     const app = appOf(r);
@@ -699,7 +703,7 @@
     if (d.mode === 'custom') return (fresh ? 'Saved. ' : '') + app.name + ' gets what you picked.';
     return (fresh ? 'Done. ' : '') + app.name + ' got only what it needs.';
   }
-
+  // The "Always do this for games" checkbox on the done screen, only shown for games
   function ruleBox(r, app) {
     if (!isGame(app) || !NC.rules || typeof NC.rules.addCustom !== 'function') return null;
     let has = false;
@@ -767,7 +771,7 @@
     });
     return done;
   }
-
+  // If the box is ticked, add the games rule and answer any games still waiting
   function commitRule(rule) {
     if (!rule || typeof rule.isOn !== 'function' || !rule.isOn()) return false;
     if (!NC.rules || typeof NC.rules.addCustom !== 'function') return false;
@@ -784,7 +788,7 @@
     toast(msg, { tone: 'success', action: see || undefined });
     return true;
   }
-
+  // shows what was shared and not shared, plus the receipt link and Undo
   function doneScreen(r) {
     const app = appOf(r);
     const d = r.decision;
@@ -853,7 +857,7 @@
   }
 
   // Routes
-
+  // If a request can't be found, go back to the home
   function bounce() {
     NC.router.go(NC.router.has('/requests') ? '/requests' : '/home', { replace: true });
     return null;
@@ -902,12 +906,12 @@
   });
 
   // The inbox: everything waiting, then what they already answered
-
+  // Tapping an answered request opens its receipt, or the done screen if there's no receipt
   function openDecided(r) {
     if (hasReceipt(r.appId)) NC.router.go('/receipts/' + r.appId);
     else NC.router.go('/check/' + r.id + '/done');
   }
-
+  // One inbox row for a request that's still waiting
   function waitingRow(r) {
     const app = appOf(r);
     const fresh = r.isNew && !r.laterAt;
@@ -923,7 +927,7 @@
       onClick: () => NC.router.go('/check/' + r.id, { transition: 'fade' }),
     });
   }
-
+  // One inbox row for a request that's already answered
   function decidedRow(r) {
     const app = appOf(r);
     const by = r.status === 'auto' || (r.decision && r.decision.mode === 'rules') ? 'Your rules answered' : 'You decided';
@@ -938,6 +942,7 @@
     });
   }
 
+  // The Requests inbox: waiting ones first, then recently decided
   NC.router.add('/requests', {
     tab: 'home',
     title: 'Requests',
@@ -962,7 +967,7 @@
   });
 
   // Hooks into Home and the tab bar
-
+  // The request card that shows on the Home screen
   function homeCard(r) {
     const app = appOf(r);
     const fresh = r.isNew && !r.laterAt;
