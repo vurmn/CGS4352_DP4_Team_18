@@ -1,9 +1,16 @@
 // The made-up apps and sites that show up across NeedCheck, plus the kinds of data
 // they can ask for. Requests, receipts and rules all point back to this list by id.
+// NC is the shared object every file adds to
 (function () {
   const NC = (window.NC = window.NC || {});
 
-  // Same tile colors and icons as our DP3 Figma. The data shown for each app is made up for the demo.
+  // Fields for each app:
+  // id - used by other files to look the app up
+  // name, category - shown on screen
+  // kind - 'app' or 'site'
+  // color, icon - the colored tile next to the name
+  // rulesCategory - which privacy rule group it falls under (Rules tab)
+  // contact - privacy email, used when asking an app to delete data
   const apps = [
     { id: 'temple-run', name: 'Temple Run', category: 'Game', kind: 'app', color: '#1B2340', icon: 'game', rulesCategory: 'games', contact: 'privacy@templerun.com' },
     { id: 'walmart', name: 'Walmart', category: 'Shopping', kind: 'site', color: '#2C7A7B', icon: 'bag', rulesCategory: 'shopping', contact: 'privacy@walmart.com' },
@@ -21,7 +28,7 @@
     { id: 'canvas', name: 'Canvas', category: 'School portal', kind: 'site', color: '#4F6FA8', icon: 'school', rulesCategory: 'other', contact: 'privacy@canvas.com' },
     { id: 'google-maps', name: 'Google Maps', category: 'Maps', kind: 'app', color: '#3E8E6A', icon: 'map', rulesCategory: 'maps', contact: 'privacy@google.com' },
   ];
-
+  // turns the list into a lookup by id 
   NC.apps = {};
   apps.forEach((a) => { NC.apps[a.id] = a; });
 
@@ -29,7 +36,8 @@
   NC.app = function (id) {
     return NC.apps[id] || { id: id, name: id || 'Unknown app', category: 'App', kind: 'app', color: '#57534A', icon: 'globe', rulesCategory: 'other', contact: '' };
   };
-
+  // the label and icon are what user sees
+  // types of data a app can ask for 
   NC.dataTypes = {
     location: { label: 'Location', icon: 'pin' },
     contacts: { label: 'Contacts', icon: 'users' },
@@ -50,7 +58,8 @@
     payment: { label: 'Payment card', icon: 'card' },
     account: { label: 'Your account', icon: 'user' },
   };
-
+   // Get a data types label and icon by its key
+  // If the key isn't in the list, show the key itself so nothing breaks
   NC.dataType = function (key) {
     return NC.dataTypes[key] || { label: key, icon: 'info' };
   };
